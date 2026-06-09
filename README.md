@@ -1,10 +1,15 @@
 # 🍺 SOBERGATE — Don't Drink and Code
 
-> Se sei ubriaco non puoi programmare. E nemmeno il tuo AI può farlo al posto tuo.
->
-> *If you're drunk you can't code. And your AI can't take the test for you.*
+[![CI](https://github.com/thefakepase/dont-drink-and-code/actions/workflows/ci.yml/badge.svg)](https://github.com/thefakepase/dont-drink-and-code/actions/workflows/ci.yml)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Works on: Claude Code](https://img.shields.io/badge/blocks-Claude%20Code%20%7C%20Codex%20%7C%20any%20AI%20agent-red.svg)](#)
 
-**SOBERGATE** è un test di sobrietà da terminale che **blocca Claude Code, Codex e qualsiasi coding agent** finché non dimostri di essere lucido. Niente sensori, niente etilometro: 60 secondi di prove che un ubriaco sbaglia e che un'AI non può superare al posto tuo.
+> *If you're drunk you can't code. And your AI can't take the test for you.*
+>
+> Se sei ubriaco non puoi programmare. E nemmeno la tua AI può farlo al posto tuo.
+
+**SOBERGATE** is a terminal sobriety test that **blocks Claude Code, Codex, and any AI coding agent** until you prove you're sober. No sensors, no breathalyzer: 60 seconds of tests that a drunk person fails and that no AI can pass on your behalf.
 
 ---
 

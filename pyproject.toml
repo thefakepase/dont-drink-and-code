@@ -30,5 +30,8 @@ Repository = "https://github.com/thefakepase/dont-drink-and-code"
 [tool.setuptools.packages.find]
 include = ["sobergate*"]
 
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
