@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sobergate"
+version = "0.1.0"
+description = "Don't drink and code: sobriety test that blocks Claude Code, Codex and any coding agent until you pass."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Andrea Pasetti" }]
+keywords = ["sobriety", "claude-code", "codex", "hooks", "fun", "safety"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Utilities",
+]
+
+[project.scripts]
+sobergate = "sobergate.cli:main"
+
+[project.urls]
+Repository = "https://github.com/thefakepase/dont-drink-and-code"
+
+[tool.setuptools.packages.find]
+include = ["sobergate*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
