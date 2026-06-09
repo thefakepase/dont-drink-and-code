@@ -33,6 +33,17 @@ def _fmt_until(expires: float) -> str:
 
 
 def cmd_test(args: argparse.Namespace) -> int:
+    lang = args.lang or _detect_lang()
+    t = battery.TEXTS.get(lang, battery.TEXTS["en"])
+
+    if args.demo:
+        report = battery.run_demo(lang)
+        print()
+        print(f"   riflessi {report.breakdown['riflessi']}/100 · battitura {report.breakdown['battitura']}/100 · stroop {report.breakdown['stroop']}/100")
+        print()
+        print(t["passed"].format(total=report.total, until="23:41"))
+        return 0
+
     remaining = token_store.cooldown_remaining()
     if remaining > 0:
         print(f"⏳ Cooldown attivo: riprova tra {remaining / 60:.0f} minuti. Bevi un bicchiere d'acqua 💧")
@@ -41,8 +52,6 @@ def cmd_test(args: argparse.Namespace) -> int:
         print("❌ Il test richiede un terminale interattivo (TTY). Niente pipe, niente agenti.", file=sys.stderr)
         return 1
 
-    lang = args.lang or _detect_lang()
-    t = battery.TEXTS.get(lang, battery.TEXTS["en"])
     report = battery.run_battery(lang)
 
     print()
@@ -151,6 +160,7 @@ def build_parser() -> argparse.ArgumentParser:
     t = sub.add_parser("test", help="esegui il test di sobrietà")
     t.add_argument("--hours", type=float, default=token_store.DEFAULT_HOURS, help="validità del token in ore (default 10)")
     t.add_argument("--lang", choices=["it", "en"], help="lingua del test (default: dal locale)")
+    t.add_argument("--demo", action="store_true", help="sessione dimostrativa animata (nessun input richiesto)")
     t.set_defaults(func=cmd_test)
 
     c = sub.add_parser("check", help="verifica il token (exit 0 = sobrio)")

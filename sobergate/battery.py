@@ -146,6 +146,81 @@ def run_stroop(t: dict, lang: str) -> scoring.TestResult:
     return scoring.stroop_score(results)
 
 
+def _typewrite(text: str, wpm: float = 55, jitter: float = 0.04) -> None:
+    """Stampa `text` un carattere alla volta con ritmo umano simulato."""
+    rng = random.Random(42)
+    delay = 60.0 / (wpm * 5)
+    for ch in text:
+        sys.stdout.write(ch)
+        sys.stdout.flush()
+        time.sleep(max(0.02, delay + rng.uniform(-jitter, jitter)))
+
+
+def run_demo(lang: str = "it") -> scoring.ScoreReport:
+    """Sessione dimostrativa scriptata: nessun input reale, solo animazione."""
+    t = TEXTS.get(lang, TEXTS["en"])
+    _println(t["intro"])
+    time.sleep(0.8)
+
+    # ── RIFLESSI ──────────────────────────────────────────────────────────────
+    _println()
+    _println(t["reaction_title"])
+    latencies = []
+    for ms in (231, 218, 244):
+        _println(t["wait"])
+        time.sleep(random.uniform(1.4, 2.2))
+        _println(t["go"])
+        time.sleep(ms / 1000)
+        _println(f"   {ms} ms")
+        latencies.append(ms / 1000)
+
+    # ── BATTITURA ─────────────────────────────────────────────────────────────
+    _println()
+    _println(t["typing_title"])
+    phrase = "la volpe 38 scivola sotto la luna felice" if lang == "it" else "the robot 38 slides under the happy moon"
+    _println(f'   "{phrase}"')
+    sys.stdout.write("   > ")
+    sys.stdout.flush()
+    _typewrite(phrase)
+    sys.stdout.write("\n")
+    sys.stdout.flush()
+
+    # ── STROOP ────────────────────────────────────────────────────────────────
+    colors = STROOP_COLORS[lang]
+    names = list(colors)
+    _println()
+    _println(t["stroop_title"])
+    _println(t["stroop_keys"] + "  ".join(f"[{k}]={name}" for name, (k, _) in colors.items()))
+
+    demo_pairs = [
+        ("rosso" if lang == "it" else "red",   "verde" if lang == "it" else "green"),
+        ("verde" if lang == "it" else "green",  "blu"   if lang == "it" else "blue"),
+        ("blu"   if lang == "it" else "blue",   "rosso" if lang == "it" else "red"),
+        ("giallo" if lang == "it" else "yellow", "giallo" if lang == "it" else "yellow"),
+        ("rosso" if lang == "it" else "red",   "blu"   if lang == "it" else "blue"),
+    ]
+    stroop_results = []
+    for word, ink in demo_pairs:
+        if word not in colors or ink not in colors:
+            continue
+        _, code = colors[ink]
+        correct_key, _ = colors[ink]
+        time.sleep(random.uniform(0.6, 1.0))
+        sys.stdout.write(f"   \033[1;{code}m{word.upper()}\033[0m ? ")
+        sys.stdout.flush()
+        rt = random.uniform(0.75, 1.35)
+        time.sleep(rt)
+        correct = (ink == word) or random.random() > 0.15
+        stroop_results.append((correct, rt))
+        _println("✓" if correct else "✗")
+
+    reaction = scoring.reaction_score(latencies)
+    stamps = [0.18 * i + random.uniform(-0.03, 0.05) for i in range(len(phrase))]
+    typing = scoring.typing_score(phrase, phrase, [100.0 + s for s in stamps])
+    stroop = scoring.stroop_score(stroop_results)
+    return scoring.composite(reaction, typing, stroop)
+
+
 def run_battery(lang: str = "it") -> scoring.ScoreReport:
     t = TEXTS.get(lang, TEXTS["en"])
     _println(t["intro"])
