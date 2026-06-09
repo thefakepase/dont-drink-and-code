@@ -11,6 +11,8 @@
 
 **SOBERGATE** is a terminal sobriety test that **blocks Claude Code, Codex, and any AI coding agent** until you prove you're sober. No sensors, no breathalyzer: 60 seconds of tests that a drunk person fails and that no AI can pass on your behalf.
 
+![SOBERGATE demo](demo.gif)
+
 ---
 
 ## English TL;DR
